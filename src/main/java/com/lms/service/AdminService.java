@@ -3,6 +3,9 @@ package com.lms.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.lms.dto.ClassroomDTO;
+import com.lms.dto.StudentDTO;
 import com.lms.dto.TeacherDTO;
 import com.lms.entity.TeacherEntity;
 
@@ -15,5 +18,13 @@ public interface AdminService {
 	public void editTeacher(TeacherDTO teacherDTO);
 	public void deleteTeacher(int teacherId);
 	public void restoreTeacher(int teacherId);
+	
+	public List<StudentDTO> getAllStudents(); 
+	public void deleteStudent(int studentId);
+	
+	public void createClassroom(ClassroomDTO classDTO);
+	public List<ClassroomDTO> getAllClasses();
+	public void deleteClassroom(int classId);
+	public void createTeacherEnrollment(int classroomId,List<Integer> teacherIds);
 	
 }

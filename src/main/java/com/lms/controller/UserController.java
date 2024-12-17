@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lms.dto.LoginDTO;
 import com.lms.dto.UserDTO;
@@ -28,17 +29,13 @@ public class UserController {
 	}
 	@GetMapping("/login")
 	public ModelAndView showLoginForm(Model model) {
-//		String errorMessage=(String) model.getAttribute("error");
-//		if(errorMessage!=null) {
-//			model.addAttribute("error", errorMessage);
-//		}
 		return new ModelAndView("login","loginObj",new LoginDTO());
 	}
 	@PostMapping("/doLogin")
-	public String doLogin(@ModelAttribute("loginObj")LoginDTO loginDTO,Model model,HttpSession session) {
+	public String doLogin(@ModelAttribute("loginObj")LoginDTO loginDTO,RedirectAttributes redirectAttributes,HttpSession session) {
 		String errorMessage=userService.validateLogin(loginDTO);
 		if(errorMessage!=null) {
-			model.addAttribute("error", errorMessage);
+			redirectAttributes.addFlashAttribute("error", errorMessage);
 			return "redirect:/login";
 		}else {
 			UserDTO userDTO=userService.doLogin(loginDTO);
@@ -51,5 +48,9 @@ public class UserController {
 			}
 		}
 	}
-	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/login";
+	}
 }

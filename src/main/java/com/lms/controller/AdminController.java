@@ -1,5 +1,6 @@
 package com.lms.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -11,16 +12,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.lms.dto.ClassroomDTO;
+import com.lms.dto.StudentDTO;
 import com.lms.dto.TeacherDTO;
 import com.lms.dto.UserDTO;
 import com.lms.entity.AdminEntity;
 import com.lms.entity.TeacherEntity;
 import com.lms.service.AdminService;
 import com.lms.service.AdminServiceImpl;
+import com.lms.service.CloudinaryService;
 import com.lms.service.UserService;
 import com.lms.service.UserServiceImpl;
+
+
 
 @Controller
 public class AdminController {
@@ -30,6 +38,9 @@ public class AdminController {
 	@Autowired
 	private final UserService userService=new UserServiceImpl();
 	
+	
+	
+//===========================Teacher Management=============================================
 	@GetMapping("/showTeacher")
 	public String showTeacherList(Model model) {
 		List<TeacherDTO> teacherList=adminService.getAllTeachers();
@@ -41,10 +52,10 @@ public class AdminController {
 		return new ModelAndView("createTeacherForm","teacherObj",new TeacherEntity());
 	}
 	@PostMapping("/createTeacher")
-	public String createTeacher(@ModelAttribute("teacherObj") TeacherEntity teacher, Model model,HttpSession session) {
+	public String createTeacher(@ModelAttribute("teacherObj") TeacherEntity teacher, RedirectAttributes redirectAttributes,HttpSession session) {
 	    String errorMessage = userService.validateEmail(teacher.getEmail());
 	    if (errorMessage != null) {
-	        model.addAttribute("error", errorMessage);
+	        redirectAttributes.addFlashAttribute("error", errorMessage);
 	        return "redirect:/createTeacherForm";
 	    }
 	    UserDTO userDTO=(UserDTO) session.getAttribute("userInfo");
@@ -77,5 +88,44 @@ public class AdminController {
 	public String restoreTeacher(@RequestParam("teacherId")int teacherId) {
 		adminService.restoreTeacher(teacherId);
 		return "redirect:/showDeletedTeachers";
+	}
+//===========================Student Management=============================================
+	@GetMapping("/showStudent")
+	public String showStudent(Model model) {
+		List<StudentDTO> studentList=adminService.getAllStudents();
+		model.addAttribute("studentList", studentList);
+		return "showStudentList";
+	}
+	@GetMapping("/deleteStudent")
+	public String deleteStudent(@RequestParam("studentId")int studentId) {
+		adminService.deleteStudent(studentId);
+		return "redirect:/showStudent";
+	}
+//==========================Classroom Management=====================================================
+	@GetMapping("/showClassroom")
+	public String showClassroom(Model model) {
+		List<ClassroomDTO> classList=adminService.getAllClasses();
+		model.addAttribute("classList", classList);
+		return "classroomList";
+	}
+	@GetMapping("/showCreateClass")
+	public ModelAndView showCreateClass(Model model,HttpSession session) {
+		List<TeacherDTO> teacherList=adminService.getAllTeachers();
+		UserDTO adminDTO=(UserDTO) session.getAttribute("userInfo");
+		model.addAttribute("adminName", adminDTO.getName());
+		model.addAttribute("teacherList", teacherList);
+		return new ModelAndView("createClassForm","classObj",new ClassroomDTO());
+	}
+	@PostMapping("/createClass")
+	public String createClass(@ModelAttribute("classObj")ClassroomDTO classDTO,HttpSession session) {
+		UserDTO admin=(UserDTO) session.getAttribute("userInfo");
+		classDTO.setAdminId(admin.getId());
+		adminService.createClassroom(classDTO);
+		return "redirect:/showClassroom";
+	}
+	@GetMapping("/deleteClass")
+	public String deleteClass(@RequestParam("id")int classId) {
+		adminService.deleteClassroom(classId);
+		return "redirect:/showClassroom";
 	}
 }

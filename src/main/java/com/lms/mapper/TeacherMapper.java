@@ -10,8 +10,6 @@ import com.lms.repository.TeacherRepository;
 
 public class TeacherMapper {
 	
-	@Autowired
-	private final AdminRepository adminRepo=new AdminRepository();
 	
 	@Autowired
 	private final TeacherRepository teacherRepo=new TeacherRepository();
@@ -31,13 +29,13 @@ public class TeacherMapper {
 	    }
 	    return teacherDTO;
 	}
-	 public static TeacherEntity toEntity(TeacherDTO dto) {
+	 public  TeacherEntity toEntity(TeacherDTO dto) {
+		 	
 	        if (dto == null) {
 	            return null;
 	        }
 	        
-	        TeacherEntity entity = new TeacherEntity();
-	        entity.setId(dto.getId());
+	        TeacherEntity entity = teacherRepo.retrieveTeacherById(dto.getId());
 	        entity.setName(dto.getName());
 	        entity.setEmail(dto.getEmail());
 	        entity.setPassword(dto.getPassword());
@@ -45,11 +43,7 @@ public class TeacherMapper {
 	        entity.setAddress(dto.getAddress());
 	        entity.setGender(dto.getGender());
 	        entity.setGenerate_password(dto.getGenerate_password());
-	        if (dto.getAdminId() != 0) { 
-	            AdminEntity admin = new AdminEntity();
-	            admin.setId(dto.getAdminId());
-	            entity.setAdmin(admin);
-	        }
+	       
 	        
 	        return entity;
 	    }

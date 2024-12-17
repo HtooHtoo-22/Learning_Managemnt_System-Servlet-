@@ -47,12 +47,12 @@
     <div class="sidebar">
         <h2>Admin Panel</h2>
         <a href="showTeacher">Teacher Management</a>
-        <a href="ShowStudentServlet">Student Management</a>
-        <a href="ViewClassroomServlet">Classroom Management</a>
+        <a href="showStudent">Student Management</a>
+        <a href="showClassroom">Classroom Management</a>
         <a href="#">Enrollment</a>
         <a href="#">Settings</a>
         
-        <a href="LogoutServlet" class="logout-link">
+        <a href="logout" class="logout-link">
   <i class="fas fa-sign-out-alt"></i> Log Out
 </a>
 	

@@ -21,7 +21,7 @@
         <input type="submit" value="Login">
         </form:form>
         <a href="StudentRegisterServlet">Create Account</a><br>
-        <a href="student.jsp">Home</a>
+        <a href="${pageContext.request.contextPath}/">Home</a>
     </div>
 </body>
 </html>
