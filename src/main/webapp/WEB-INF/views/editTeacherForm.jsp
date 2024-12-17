@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -112,29 +113,37 @@ button[type="submit"] {
 <%@ include file="sidebar.jsp" %>
 <div class="container">
         <h1>Editing Tr.${teacher.name} Form</h1>
-        <form action="EditTeacherServlet" method="POST">
-        	<input type="hidden" name="trId" value="${teacher.id}">
-        
-            <label for="full_name">Full Name</label>
-            <input type="text" id="full_name" name="full_name" required="required" value="${teacher.name}">
+      
 
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required="required" value="${teacher.email}">
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
-            <label for="qualification">Highest Qualification</label>
-            <input type="text" id="qualification" name="qualification" required="required" value="${teacher.qualification}">
+<form:form action="editTeacher" method="POST" modelAttribute="teacherObj">
+	<input type="hidden" name="id" value="${teacherObj.id}">
+    <!-- Full Name -->
+    <label for="full_name">Full Name</label>
+    <form:input path="name" id="full_name" required="required" value="${teacherObj.name}"/>
 
-            <label for="address">Address</label>
-            <textarea id="address" name="address" rows="4" required="required">${teacher.address}</textarea>
+    <!-- Email Address -->
+    <label for="email">Email Address</label>
+    <form:input path="email" id="email" type="email" required="required" value="${teacherObj.email}"/>
+
+    <!-- Highest Qualification -->
+    <label for="qualification">Highest Qualification</label>
+    <form:input path="qualification" id="qualification" required="required" value="${teacherObj.qualification}"/>
+
+    <!-- Address -->
+    <label for="address">Address</label>
+    <form:textarea path="address" id="address" rows="4" required="required" value="${teacherObj.address}"></form:textarea>
+
+    <!-- Submit Button -->
+    <button type="submit">Update Teacher</button>
+    
+    <!-- Cancel Link -->
+    <a href="${pageContext.request.contextPath}/showTeacher" class="cancel-link">Cancel</a>
+
+</form:form>
 
 
-           
-            
-
-            <button type="submit" value="Create">Update Teacher</button>
-            <a href="ShowTeacherServlet" class="cancel-link">Cancel</a>
-
-        </form>
     </div>
 </body>
 </html>

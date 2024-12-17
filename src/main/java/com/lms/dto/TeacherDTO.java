@@ -12,7 +12,6 @@ public class TeacherDTO {
 	private String address;
 	private String gender;
 	private String generate_password;
-	private int status;
 	private int adminId;
 	private String adminName;
 }

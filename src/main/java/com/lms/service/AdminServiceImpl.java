@@ -46,5 +46,14 @@ public class AdminServiceImpl implements AdminService{
 		TeacherDTO teacherDTO=teacherMapper.toDTO(teacherEntity);
 		return teacherDTO;
 	}
+	@Override
+	public void editTeacher(TeacherDTO teacherDTO) {
+		TeacherEntity teacherEntity=teacherRepo.retrieveTeacherById(teacherDTO.getId());
+		teacherEntity.setName(teacherDTO.getName());
+		teacherEntity.setEmail(teacherDTO.getEmail());
+		teacherEntity.setAddress(teacherDTO.getAddress());
+		teacherEntity.setQualification(teacherDTO.getQualification());
+		teacherRepo.updateTeacher(teacherEntity);
+	}
 	
 }

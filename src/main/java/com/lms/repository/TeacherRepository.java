@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.lms.dto.TeacherDTO;
 import com.lms.entity.AdminEntity;
 import com.lms.entity.TeacherEntity;
 
@@ -42,5 +43,28 @@ public class TeacherRepository {
 		TeacherEntity teacher=em.find(TeacherEntity.class, teacherId);
 		return teacher;
 	}
+	public void updateTeacher(TeacherEntity teacherEntity) {
+	    EntityManager em = null;
+	    try {
+	        em = JPAUtil.getEniEntityManager(); // Assuming your utility method returns an EntityManager
+	        em.getTransaction().begin();
+	        
+	        // Perform the update
+	        em.merge(teacherEntity);
+	        
+	        // Commit the transaction
+	        em.getTransaction().commit();
+	    } catch (RuntimeException e) {
+	        if (em != null && em.getTransaction().isActive()) {
+	            em.getTransaction().rollback(); // Rollback in case of error
+	        }
+	        throw e; // Rethrow the exception after rollback
+	    } finally {
+	        if (em != null) {
+	            em.close(); // Ensure the EntityManager is closed
+	        }
+	    }
+	}
+
 
 }

@@ -32,7 +32,6 @@ public class AdminEntity {
     
     @Column(name = "status", nullable = false)
     private int status;
-    
     @PrePersist
 	protected void onCreate() {
 	    if (status == 0) { // If not explicitly set, assign default

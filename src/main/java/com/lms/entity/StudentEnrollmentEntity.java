@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -35,4 +36,16 @@ public class StudentEnrollmentEntity {
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="classroom_id",nullable = false)
 	private ClassroomEntity classroom;
+	
+	@PrePersist
+	protected void onCreate() {
+	    if (status == 0) { // If not explicitly set, assign default
+	        status = 1;
+	    }
+	    
+	    LocalDateTime now = LocalDateTime.now();
+	    if (enrollmentDate == null) {
+	        enrollmentDate = now;
+	    }
+	}
 }

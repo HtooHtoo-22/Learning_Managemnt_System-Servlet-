@@ -42,15 +42,19 @@ public class ClassroomEntity {
 	    private LocalDateTime createdDate;
 	    
 	    @PrePersist
-	    public void prePersist() {
-	        if (this.status == 0) {  // Default status is 1
-	            this.status = 1;
-	        }
-	        if (this.createdDate == null) {
-	            this.createdDate = LocalDateTime.now();  // Set default created date if not provided
-	        }
-	    }
+		protected void onCreate() {
+		    if (status == 0) { // If not explicitly set, assign default
+		        status = 1;
+		    }
+		    
+		    LocalDateTime now = LocalDateTime.now();
+		    if (createdDate == null) {
+		    	createdDate = now;
+		    }
+		  
+		}
 	    @ManyToOne(cascade = CascadeType.PERSIST)
 		@JoinColumn(name="admin_id",nullable = false)
 		private AdminEntity admin;
+	    
 }

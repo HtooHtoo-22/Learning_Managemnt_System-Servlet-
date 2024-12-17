@@ -55,7 +55,11 @@ public class AdminController {
 	@GetMapping("/showEditTeacherForm")
 	public ModelAndView showEditTrForm(@RequestParam("id")int teacherId,Model model) {
 		TeacherDTO teacher=adminService.getTeacherById(teacherId);
-		model.addAttribute("teacher", teacher);
-		return new ModelAndView("editTeacherForm","teacherObj",new TeacherDTO());
+		return new ModelAndView("editTeacherForm","teacherObj",teacher);
+	}
+	@PostMapping("/editTeacher")
+	public String editTeacher(@ModelAttribute("teacherObj")TeacherDTO teacherDTO) {
+		adminService.editTeacher(teacherDTO);
+		return "redirect:/showTeacher";
 	}
 }

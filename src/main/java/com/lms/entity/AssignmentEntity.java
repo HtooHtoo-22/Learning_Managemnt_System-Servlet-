@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -44,4 +45,18 @@ public class AssignmentEntity {
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="material_id",nullable = false)
 	private MaterialEntity material;
+	
+	@PrePersist
+	protected void onCreate() {
+	    if (status == 0) { // If not explicitly set, assign default
+	        status = 1;
+	    }
+	    LocalDateTime now = LocalDateTime.now();
+	    if (startDate == null) {
+	        startDate = now;
+	    }
+	    if (endDate == null) {
+	        endDate = now;
+	    }
+	}
 }
