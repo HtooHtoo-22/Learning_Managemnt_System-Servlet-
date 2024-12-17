@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,18 +73,40 @@
         .create-button:active {
             background-color: #002147; /* Even darker blue on click */
         }
+        .cancel-link {
+    display: inline-block;
+    background-color: #f44336; /* Red color for the cancel link */
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-top: 60px; /* Add some space from surrounding elements */
+    margin-left: 300px;
+}
+
+.cancel-link:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+.cancel-link:active {
+    background-color: #b71c1c; /* Even darker red on click */
+}
     </style>
 </head>
 <body>
+
     <!-- Include Sidebar -->
     <%@ include file="sidebar.jsp" %>
 
     <div class="container">
-        <h1>Teacher List</h1>
+        <h1>Deleted Teacher List</h1>
 
         <!-- Teacher List Table -->
         <table>
-        <a href="createTeacherForm" class="create-button">Create New Teacher</a>
+        
             <thead>
                 <tr>
                     <th>Name</th>
@@ -105,19 +126,24 @@
                         <td>${teacher.name}</td>
                         <td>${teacher.email}</td>
                         <td>${teacher.gender}</td>
-                        <td>${teacher.address}</td>	
+                        <td>${teacher.address}</td>
                         <td>${teacher.qualification}</td>
-                        <c:if test="${teacher.password=='teacher'}">
-                        <td style="color: red">${teacher.generate_password}</td>
+                        <c:if test="${not empty teacher.generate_password}">
+                        <td>${teacher.generate_password}</td>
                         </c:if>
-                        <c:if test="${teacher.password !='teacher'}">
-                        <td style="color: green">Logged In!</td>
+                        <c:if test="${empty teacher.generate_password}">
+                        <td>Logged In!</td>
                         </c:if>
                         
                         <td>${teacher.adminName}</td>
                         <td>
-                        <a href="showEditTeacherForm?id=${teacher.id}"> <i class="fas fa-edit"></i> </a>  
-                        <a href="deleteTeacher?id=${teacher.id}"> <i class="fas fa-trash-alt"></i>  </a>
+                        <form action="restoreTeacher" method="post">
+                        	<input type="hidden" name="teacherId" value="${teacher.id}">
+                        	<button type="submit" class="recycle-btn">
+        						<i class="fas fa-recycle"></i> 
+    						</button>
+                        </form>
+                        
                         </td>
                     </tr>
                 </c:forEach>
@@ -125,9 +151,9 @@
             </tbody>
             
         </table>
-
+	
         <!-- Create New Teacher Button (Styled link) -->
-        <a href="showDeletedTeachers" class="create-button">Restore Teacher</a>
+        <a href="showTeacher" class="cancel-link">Cancel</a>
     </div>
     
 </body>

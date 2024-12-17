@@ -27,7 +27,7 @@ public class UserRepository {
 	            return role; 
 	        }
 	    } catch (NoResultException e) {
-	        System.out.println("Not Found Table :"+e.getMessage());
+	       
 	    }
 
 	    // Check Teacher role
@@ -42,7 +42,7 @@ public class UserRepository {
 	                return role; // Exit early if role is found
 	            }
 	        } catch (NoResultException e) {
-	        	System.out.println("Not Found Table :"+e.getMessage());
+	        	
 	        }
 	    }
 
@@ -58,10 +58,36 @@ public class UserRepository {
 	                return role; // Exit early if role is found
 	            }
 	        } catch (NoResultException e) {
-	        	System.out.println("Not Found Table :"+e.getMessage());
+	        	
 	        }
 	    }
 	    return role; 
+	}
+
+	// Close EntityManager properly
+	public UserDTO checkAdminPassword1(LoginDTO loginDTO) {
+	    UserDTO userDTO = null;
+	    try (EntityManager em = JPAUtil.getEniEntityManager()) { // Try-with-resources
+	        String query = "SELECT a FROM AdminEntity a WHERE a.email=:email AND a.password=:password";
+	        TypedQuery<AdminEntity> queryAdmin = em.createQuery(query, AdminEntity.class);
+	        queryAdmin.setParameter("email", loginDTO.getEmail());
+	        queryAdmin.setParameter("password", loginDTO.getPassword());
+	        AdminEntity admin = queryAdmin.getSingleResult();
+	        if (admin != null) {
+	            userDTO = new UserDTO();
+	            userDTO.setId(admin.getId());
+	            userDTO.setName(admin.getName());
+	            userDTO.setEmail(admin.getEmail());
+	            userDTO.setPassword(admin.getPassword());
+	            userDTO.setRole("Admin");
+	        }
+	    } catch (NoResultException e) {
+	        // Just log it, don't persist anything.
+	        //System.out.println("No Admin Found for email: " + loginDTO.getEmail());
+	    } catch (Exception e) {
+	        e.printStackTrace(); 
+	    }
+	    return userDTO;
 	}
 
 	public UserDTO checkAdminPassword(LoginDTO loginDTO) {
@@ -82,9 +108,9 @@ public class UserRepository {
 	            userDTO.setRole("Admin");
 	        }
 	    } catch (NoResultException e) {
-	        System.out.println("No admin found with the provided credentials.");
+	       
 	    } catch (Exception e) {
-	        System.out.println("An unexpected error occurred while checking admin credentials: " + e.getMessage());
+	       
 	    } finally {
 	        if (em != null) {
 	            em.close();
@@ -92,7 +118,6 @@ public class UserRepository {
 	    }
 	    return userDTO;
 	}
-
 	public UserDTO checkTeacherPassword(LoginDTO loginDTO) {
 	    UserDTO userDTO = null;
 	    EntityManager em = JPAUtil.getEniEntityManager();
@@ -111,9 +136,9 @@ public class UserRepository {
 	            userDTO.setRole("Teacher");
 	        }
 	    } catch (NoResultException e) {
-	        System.out.println("No teacher found with the provided credentials.");
+	       
 	    } catch (Exception e) {
-	        System.out.println("An unexpected error occurred while checking teacher credentials: " + e.getMessage());
+	       
 	    } finally {
 	        if (em != null) {
 	            em.close();
@@ -140,9 +165,9 @@ public class UserRepository {
 	            userDTO.setRole("Student");
 	        }
 	    } catch (NoResultException e) {
-	        System.out.println("No student found with the provided credentials.");
+	        
 	    } catch (Exception e) {
-	        System.out.println("An unexpected error occurred while checking student credentials: " + e.getMessage());
+	      
 	    } finally {
 	        if (em != null) {
 	            em.close();

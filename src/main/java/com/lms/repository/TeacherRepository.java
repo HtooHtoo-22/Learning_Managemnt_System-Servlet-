@@ -65,6 +65,26 @@ public class TeacherRepository {
 	        }
 	    }
 	}
+	public void updateTeacherStatusTo0(int teacherId) {
+		EntityManager em=JPAUtil.getEniEntityManager();
+		TeacherEntity teacher=em.find(TeacherEntity.class, teacherId);
+		if(teacher!=null) {
+			em.getTransaction().begin();
+			teacher.setStatus(0);
+			em.merge(teacher);
+			em.getTransaction().commit();
+		}
+	}
+	public void updateTeacherStatusTo1(int teacherId) {
+		EntityManager em=JPAUtil.getEniEntityManager();
+		TeacherEntity teacher=em.find(TeacherEntity.class, teacherId);
+		if(teacher!=null) {
+			em.getTransaction().begin();
+			teacher.setStatus(1);
+			em.merge(teacher);
+			em.getTransaction().commit();
+		}
+	}
 
 
 }

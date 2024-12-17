@@ -36,11 +36,11 @@ public class ResourceEntity {
 	@Column(name = "status",nullable = false)
     private int status;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name="teacher_id",nullable = false)
 	private TeacherEntity teacher;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name="material_id",nullable = false)
 	private MaterialEntity material;
 	

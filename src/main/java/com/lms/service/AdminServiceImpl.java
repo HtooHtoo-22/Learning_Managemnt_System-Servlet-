@@ -1,4 +1,5 @@
 package com.lms.service;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,16 @@ public class AdminServiceImpl implements AdminService{
 	private final TeacherMapper teacherMapper=new TeacherMapper();
 	
 	@Override
-	public List<TeacherEntity> getAllTeachers(){
+	public List<TeacherDTO> getAllTeachers(){
 		List<TeacherEntity> teacherList=teacherRepo.getAllTeachers();
-		return teacherList;
+		List<TeacherDTO> teacherListDTO=new ArrayList<TeacherDTO>();
+		for(TeacherEntity teacher:teacherList) {
+			if(teacher.getStatus()==1) {
+				TeacherDTO teacherDTO=teacherMapper.toDTO(teacher);
+				teacherListDTO.add(teacherDTO);
+			}
+		}
+		return teacherListDTO;
 	}
 	@Override
 	public boolean createTeacher(TeacherEntity teacher,int adminId) {
@@ -54,6 +62,26 @@ public class AdminServiceImpl implements AdminService{
 		teacherEntity.setAddress(teacherDTO.getAddress());
 		teacherEntity.setQualification(teacherDTO.getQualification());
 		teacherRepo.updateTeacher(teacherEntity);
+	}
+	@Override
+	public void deleteTeacher(int teacherId) {
+		teacherRepo.updateTeacherStatusTo0(teacherId);
+	}
+	@Override
+	public List<TeacherDTO> getDeletedTeachers(){
+		List<TeacherEntity> teacherList=teacherRepo.getAllTeachers();
+		List<TeacherDTO> teacherListDTO=new ArrayList<TeacherDTO>();
+		for(TeacherEntity teacher:teacherList) {
+			if(teacher.getStatus()==0) {
+				TeacherDTO teacherDTO=teacherMapper.toDTO(teacher);
+				teacherListDTO.add(teacherDTO);
+			}
+		}
+		return teacherListDTO;
+	}
+	@Override
+	public void restoreTeacher(int teacherId) {
+		teacherRepo.updateTeacherStatusTo1(teacherId);
 	}
 	
 }

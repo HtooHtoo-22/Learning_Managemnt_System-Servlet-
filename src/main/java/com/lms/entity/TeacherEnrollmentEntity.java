@@ -29,11 +29,11 @@ public class TeacherEnrollmentEntity {
 	@Column(name = "status",nullable = false)
     private int status;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name="teacher_id",nullable = false)
 	private TeacherEntity teacher;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name="classroom_id",nullable = false)
 	private ClassroomEntity classroom;
 	

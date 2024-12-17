@@ -21,11 +21,11 @@ public class SubmissionEntity {
 	@Column(name="id")
     private int id;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name="student_id",nullable = false)
 	private StudentEntity student;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name="assignment_id",nullable = false)
 	private AssignmentEntity assignment;
 	

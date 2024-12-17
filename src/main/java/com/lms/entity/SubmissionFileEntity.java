@@ -23,7 +23,7 @@ public class SubmissionFileEntity {
 	@Column(name="id")
     private int id;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name="submission_id",nullable = false)
 	private SubmissionEntity submission;
 	

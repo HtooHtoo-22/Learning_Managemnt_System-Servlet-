@@ -32,7 +32,7 @@ public class AdminController {
 	
 	@GetMapping("/showTeacher")
 	public String showTeacherList(Model model) {
-		List<TeacherEntity> teacherList=adminService.getAllTeachers();
+		List<TeacherDTO> teacherList=adminService.getAllTeachers();
 		model.addAttribute("teacherList", teacherList);
 		return "showTeacherList";
 	}
@@ -61,5 +61,21 @@ public class AdminController {
 	public String editTeacher(@ModelAttribute("teacherObj")TeacherDTO teacherDTO) {
 		adminService.editTeacher(teacherDTO);
 		return "redirect:/showTeacher";
+	}
+	@GetMapping("/deleteTeacher")
+	public String deleteTeacher(@RequestParam("id")int teacherId) {
+		adminService.deleteTeacher(teacherId);
+		return "redirect:/showTeacher";
+	}
+	@GetMapping("/showDeletedTeachers")
+	public String showDeletedTeacher(Model model) {
+		List<TeacherDTO> teacherList=adminService.getDeletedTeachers();
+		model.addAttribute("teacherList", teacherList);
+		return "showDeletedTeacher";
+	}
+	@PostMapping("/restoreTeacher")
+	public String restoreTeacher(@RequestParam("teacherId")int teacherId) {
+		adminService.restoreTeacher(teacherId);
+		return "redirect:/showDeletedTeachers";
 	}
 }

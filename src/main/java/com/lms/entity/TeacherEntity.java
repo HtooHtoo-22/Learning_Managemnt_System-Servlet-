@@ -52,7 +52,7 @@ public class TeacherEntity {
 	    }
 	}
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name="admin_id",nullable = false)
 	private AdminEntity admin;
 }
