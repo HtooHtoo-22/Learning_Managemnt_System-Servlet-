@@ -4,13 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lms.dto.LoginDTO;
+import com.lms.dto.StudentDTO;
 import com.lms.dto.UserDTO;
+import com.lms.entity.StudentEntity;
+import com.lms.mapper.StudentMapper;
+import com.lms.repository.StudentRepository;
 import com.lms.repository.UserRepository;
 @Service
 public class UserServiceImpl implements UserService{
 	@Autowired
 	private final UserRepository userRepo = new UserRepository();
 	
+	@Autowired
+	private final StudentRepository stuRepo = new StudentRepository();
+	
+	private final StudentMapper studentMapper=new StudentMapper();
 	@Override
 	public UserDTO doLogin(LoginDTO loginDTO) {
 		UserDTO userDTO=null;
@@ -50,5 +58,10 @@ public class UserServiceImpl implements UserService{
 			errorMessage="Email is already used!";
 		}
 		return errorMessage;
+	}
+	@Override
+	public void registerstudent(StudentDTO student) {
+		StudentEntity studentEntity=studentMapper.toEntity(student);
+		stuRepo.insertStudent(studentEntity);
 	}
 }

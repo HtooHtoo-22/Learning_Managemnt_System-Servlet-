@@ -33,7 +33,12 @@ public class StudentRepository {
 		}else {
 			System.out.println("Update Student Status 0 Error");
 		}
-		
-		
+	}
+	public void insertStudent(StudentEntity student) {
+		EntityManager em=JPAUtil.getEniEntityManager();
+		em.getTransaction().begin();
+		em.persist(student);
+		em.getTransaction().commit();
+		em.close();
 	}
 }

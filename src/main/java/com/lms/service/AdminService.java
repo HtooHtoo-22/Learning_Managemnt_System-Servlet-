@@ -27,4 +27,7 @@ public interface AdminService {
 	public void deleteClassroom(int classId);
 	public void createTeacherEnrollment(int classroomId,List<Integer> teacherIds);
 	
+	public List<TeacherDTO> getTeachersInClassroom(int classroomId);
+	public ClassroomDTO getClassById(int classroomId);
+	
 }

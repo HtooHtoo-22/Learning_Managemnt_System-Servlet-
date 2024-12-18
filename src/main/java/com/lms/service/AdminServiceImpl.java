@@ -1,5 +1,7 @@
 package com.lms.service;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import com.lms.dto.TeacherDTO;
 import com.lms.entity.AdminEntity;
 import com.lms.entity.ClassroomEntity;
 import com.lms.entity.StudentEntity;
+import com.lms.entity.TeacherEnrollmentEntity;
 import com.lms.entity.TeacherEntity;
 import com.lms.mapper.ClassroomMapper;
 import com.lms.mapper.StudentMapper;
@@ -163,5 +166,29 @@ public class AdminServiceImpl implements AdminService{
 			trEnrollRepo.insertTeacherEnrollment(teacher, classroom);	
 		}
 	}
-	
+	@Override
+	public List<TeacherDTO> getTeachersInClassroom(int classroomId){
+		List<TeacherEnrollmentEntity> trEnrollListEntity=trEnrollRepo.retrieveTeacherEnrollmentInTheClassroom(classroomId);
+		List<TeacherDTO> trListDTO=new ArrayList<TeacherDTO>();
+		for(TeacherEnrollmentEntity teacherEnrollEntity:trEnrollListEntity) {
+			TeacherEntity teacherEntity=teacherEnrollEntity.getTeacher();
+			TeacherDTO trDTO=teacherMapper.toDTO(teacherEntity);
+			LocalDateTime createdDate = teacherEnrollEntity.getEnrollmentDate();
+			String formattedDate = createdDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			trDTO.setEnrollmentDate(formattedDate);
+			trListDTO.add(trDTO);
+		}
+		return trListDTO;
+	}
+	@Override
+	public ClassroomDTO getClassById(int classroomId) {
+		ClassroomEntity classEntity=classRepo.retrieveClassById(classroomId);
+		if(classEntity!=null) {
+			ClassroomDTO classDTO=classMapper.toDTO(classEntity);
+			return classDTO;
+		}else {
+			System.out.println("Get Class By Id Error");
+			return null;
+		}
+	}
 }

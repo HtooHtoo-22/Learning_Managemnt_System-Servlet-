@@ -1,5 +1,8 @@
 package com.lms.mapper;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lms.dto.ClassroomDTO;
@@ -22,7 +25,9 @@ public class ClassroomMapper {
 	        dto.setDescription(entity.getDescription());
 	        dto.setImageUrl(entity.getImageUrl());
 	        dto.setPasscode(entity.getPasscode());
-	        dto.setCreatedDate(entity.getCreatedDate());
+	        LocalDateTime createdDateEntity = entity.getCreatedDate();
+	        String formattedDate = createdDateEntity.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+	        dto.setCreatedDate(formattedDate);
 	        
 	        // Extract Admin details from the AdminEntity
 	        if (entity.getAdmin() != null) {

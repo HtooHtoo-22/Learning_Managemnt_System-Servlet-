@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lms.dto.LoginDTO;
+import com.lms.dto.StudentDTO;
 import com.lms.dto.UserDTO;
 import com.lms.entity.TeacherEntity;
 import com.lms.service.UserService;
@@ -51,6 +52,20 @@ public class UserController {
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
+		return "redirect:/login";
+	}
+	@GetMapping("/registerAccount")
+	public ModelAndView showRegForm() {
+		return new ModelAndView("studentRegForm","studentObj",new StudentDTO());
+	}
+	@PostMapping("/registerStudent")
+	public String registerStudent(@ModelAttribute("studentObj")StudentDTO student,RedirectAttributes redirectAttributes) {
+		String errorMessage=userService.validateEmail(student.getEmail());
+		if(errorMessage!=null) {
+			redirectAttributes.addFlashAttribute("error", errorMessage);
+			return "redirect:/registerAccount";
+		}
+		userService.registerstudent(student);
 		return "redirect:/login";
 	}
 }

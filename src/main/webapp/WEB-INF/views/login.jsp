@@ -20,7 +20,7 @@
         <form:input path="password" id="userPassword" type="password"/>
         <input type="submit" value="Login">
         </form:form>
-        <a href="StudentRegisterServlet">Create Account</a><br>
+        <a href="registerAccount">Create Account</a><br>
         <a href="${pageContext.request.contextPath}/">Home</a>
     </div>
 </body>

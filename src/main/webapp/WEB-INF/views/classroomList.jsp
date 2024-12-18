@@ -134,7 +134,7 @@ h1 {
                 <h3>${classroom.title}</h3>
                 <!-- View Details and Delete links -->
                 <div class="action-links">
-                    <a href="ViewClassDetailServlet?id=${classroom.id}">View Details</a>
+                    <a href="viewClassroomDetail?id=${classroom.id}">View Details</a>
                     <a href="deleteClass?id=${classroom.id}" onclick="return confirm('Are you sure you want to delete this classroom?')" style="color: red;">Delete</a>
                 </div>
             </div>

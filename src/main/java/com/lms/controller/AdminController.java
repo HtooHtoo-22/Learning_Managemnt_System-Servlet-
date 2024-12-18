@@ -1,6 +1,6 @@
 package com.lms.controller;
 
-import java.io.IOException;
+
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -127,5 +127,17 @@ public class AdminController {
 	public String deleteClass(@RequestParam("id")int classId) {
 		adminService.deleteClassroom(classId);
 		return "redirect:/showClassroom";
+	}
+	@GetMapping("/viewClassroomDetail")
+	public String viewClassroomDetail(@RequestParam("id")int classId,Model model) {
+		List<TeacherDTO> trList=adminService.getTeachersInClassroom(classId);
+		//List <StudentDTO> stuList=adminService.getStudentsInClassroom(classId);
+		//List <MaterialDTO>
+		ClassroomDTO classroom=adminService.getClassById(classId);
+		
+		model.addAttribute("classroom", classroom);
+		model.addAttribute("teacherList", trList);
+		return "viewClassDetail";
+		
 	}
 }

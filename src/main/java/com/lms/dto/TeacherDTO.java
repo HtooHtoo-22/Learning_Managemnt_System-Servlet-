@@ -1,5 +1,7 @@
 package com.lms.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.Data;
 
 @Data
@@ -14,4 +16,5 @@ public class TeacherDTO {
 	private String generate_password;
 	private int adminId;
 	private String adminName;
+	private String enrollmentDate; 
 }

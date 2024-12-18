@@ -14,7 +14,7 @@ public class ClassroomDTO {
     private String description;       
     private String imageUrl;          
     private String passcode;                     
-    private LocalDateTime createdDate; 
+    private String createdDate; 
     private int adminId;
     private String adminName;
     private MultipartFile imageFile;
