@@ -10,4 +10,6 @@ import com.lms.dto.ClassroomDTO;
 public interface ClassroomService {
 	public void updateClassPasscode(int classId);
 	
+	public List<ClassroomDTO> getClassThatTrEnroll(int teacherId);
+	
 }

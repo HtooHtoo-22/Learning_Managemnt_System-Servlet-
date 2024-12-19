@@ -66,12 +66,12 @@ h1 {
 <!-- Navigation Bar -->
 <div class="navbar">
     <a href="teacher.jsp" >Home</a>
-    <a href="ViewTeacherClassServle">My Classroom</a>
+    <a href="viewMyClassroomTeacher">My Classroom</a>
     <a href="/dashboard">Dashboard</a>
    <c:if test="${not empty userInfo}">
             <!-- If userInfo exists, show Profile link -->
             <a href=""><i class="fas fa-user"></i>Tr. ${userInfo.name}</a>
-             <a href="LogoutServlet" class="logout-link">
+             <a href="logout" class="logout-link">
   <i class="fas fa-sign-out-alt"></i> Log Out
 </a>
         </c:if>
