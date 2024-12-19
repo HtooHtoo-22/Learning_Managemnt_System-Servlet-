@@ -23,6 +23,7 @@ public class TeacherMapper {
 	    teacherDTO.setAddress(teacherEntity.getAddress());
 	    teacherDTO.setGender(teacherEntity.getGender());
 	    teacherDTO.setGenerate_password(teacherEntity.getGenerate_password());
+	    teacherDTO.setPassword(teacherEntity.getPassword());
 	    if (teacherEntity.getAdmin() != null) {
 	        teacherDTO.setAdminId(teacherEntity.getAdmin().getId());
 	        teacherDTO.setAdminName(teacherEntity.getAdmin().getName());
@@ -43,7 +44,6 @@ public class TeacherMapper {
 	        entity.setAddress(dto.getAddress());
 	        entity.setGender(dto.getGender());
 	        entity.setGenerate_password(dto.getGenerate_password());
-	       
 	        
 	        return entity;
 	    }

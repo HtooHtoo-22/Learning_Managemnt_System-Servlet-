@@ -1,32 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Classroom Details</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fc;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            color: #003366;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .container {
-            display: flex;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 1200px;
-        }
-
-        .content {
+<meta charset="ISO-8859-1">
+<title>${classroom.title} Classroom</title>
+<style>
+.content {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -85,15 +67,7 @@
             background-color: #1a4d8f;
         }
 
-        .passcode {
-            font-weight: bold;
-            color: #FF5733;
-            background-color: #f0f0f0;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 1.2rem;
-        }
-
+    
         .link-section {
             display: flex;
             gap: 15px;
@@ -199,7 +173,115 @@ textarea[readonly] {
         .create-button:active {
             background-color: #002147; /* Even darker blue on click */
         }    
-        .material-box {
+        a i {
+    margin-right: 8px; /* Space between the icon and the text */
+}
+  /* Modal Styles */
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* On top of other content */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
+}
+
+.modal:target {
+    display: block; /* Display when targeted */
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 350px;
+    margin: 15% auto; /* Center the modal */
+    text-align: center;
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.modal p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* Passcode input field */
+.passcode-input {
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    font-size: 32px;
+    letter-spacing: 20px; /* Space between characters */
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    padding: 0;
+    margin: 0;
+}
+
+.passcode-input:focus {
+    border-color: #005c99; /* Highlight border on focus */
+    outline: none;
+}
+
+.passcode-input::placeholder {
+    color: transparent; /* Hide placeholder */
+}
+
+/* Button Styles */
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+/* Button Styles */
+button {
+    padding: 12px 25px;
+    margin: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out; /* Smooth transition on hover */
+    width: 150px; /* Make buttons a fixed width */
+}
+
+/* Close button */
+#modalCloseBtn {
+    background-color: #dc3545; /* Red for Close button */
+    color: white;
+}
+
+#modalCloseBtn:hover {
+    background-color: #c82333; /* Darker red on hover */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+/* Join button */
+#joinClassBtn {
+    background-color: grey; /* Green for Join button */
+    color: white;
+}
+
+#joinClassBtn:hover {
+    background-color: #218838; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+/* Button Focus (optional for accessibility) */
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25); /* Blue outline on focus */
+}
+/* Styling for the error message */
+
+  .material-box {
     border: 1px solid #ccc;  /* Border around the box */
     border-radius: 8px;  /* Rounded corners */
     padding: 15px;  /* Padding inside the box */
@@ -256,37 +338,50 @@ textarea[readonly] {
     color: #007BFF;  /* You can adjust the color */
 }
         
-    </style>
+</style>
 </head>
 <body>
-<%@ include file="sidebar.jsp" %>
+<!-- Modal Structure -->
+<div id="joinModal" class="modal">
+    <div class="modal-content">
+        <h2>Join The Class</h2>
+        <p>Enter the class passcode:</p>
+		<form action="JoinClassServlet" method="post">
+		<input type="text" id="passcodeInput" class="passcode-input" name="passcode" maxlength="5" required="required"/>
+		<button id="joinClassBtn">Yes, Join</button>
+		<input type="hidden" name="classroomId" value="${classroom.id}">
+		
+		</form>
+        <!-- Single input styled to look like 5 separate slots -->
+        
+		<button id="modalCloseBtn">Close</button>
+        <!-- Buttons -->
+        
+        
+    </div>
+</div>
 
 <div class="container">
-    <!-- Sidebar (Already included with sidebar.jsp) -->
+<%@ include file="navigation.jsp" %>
 
-    <!-- Main Content Section -->
-    <div class="content">
-        <h1>Classroom Details</h1>
 
         <!-- Classroom Header Section -->
         <div class="classroom-header">
             <img src="${classroom.imageUrl}" alt="Classroom Image"/>
             <div class="information">
                 <h2>Title : ${classroom.title}</h2>
-                <p><strong>Passcode:</strong> <span class="passcode">${classroom.passcode}</span></p>
                 <div class="link-section">
                     <!-- Links to toggle different sections -->
                     <a href="javascript:void(0);" class="link" onclick="toggleSection('info')">Info</a>
+                    <a href="javascript:void(0);" class="link" onclick="toggleSection('material')">Material</a>
                     <a href="javascript:void(0);" class="link" onclick="toggleSection('teacher')">Teacher</a>
                     <a href="javascript:void(0);" class="link" onclick="toggleSection('student')">Student</a>
-                    <a href="javascript:void(0);" class="link" onclick="toggleSection('enrollment')">Enrollment</a>
-                    <a href="javascript:void(0);" class="link" onclick="toggleSection('material')">Material</a>
+                   
+                    
                 </div>
             </div>
         </div>
-
-        <!-- Dynamic Content Sections -->
-       <div id="info" class="section-content">
+ <div id="info" class="section-content">
     <h3>Classroom Info</h3>
     
     <!-- Display Description in a Read-Only Textarea -->
@@ -295,16 +390,13 @@ textarea[readonly] {
 
     <!-- Created Date (Formatted) -->
     <p><strong>Created On:</strong> 
-        ${classroom.createdDate}
+       ${classroom.createdDate}
     </p>
 
     <!-- Created Admin Name -->
     <p><strong>Created By:</strong>Admin ${classroom.adminName}</p>
 </div>
-
-
-
-        <div id="teacher" class="section-content">
+<div id="teacher" class="section-content">
             <h3>Teacher Info</h3>
              <table>
        
@@ -315,9 +407,8 @@ textarea[readonly] {
                     <th>Gender</th>
                     <th>Address</th>
                     <th>Qualification</th>
+                    <th>Joined Date</th>
                     
-                    <th>Enrollment Date</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -329,10 +420,8 @@ textarea[readonly] {
                         <td>${teacher.gender}</td>
                         <td>${teacher.address}</td>
                         <td>${teacher.qualification}</td>
-                        <td>${teacher.enrollmentDate}</td>
-                        <td>
-                        <a href="DeleteTeacherEnrollmentServlet?id=${teacher.id}"> <i class="fas fa-trash-alt"></i>  </a>
-                        </td>
+                   		<td>${teacher.enrollmentDate}</td>
+                        
                     </tr>
                 </c:forEach>
                 
@@ -341,7 +430,6 @@ textarea[readonly] {
         </table>
         
         </div>
-
         <div id="student" class="section-content">
             <h3>Student Info</h3>
             <table>
@@ -353,7 +441,7 @@ textarea[readonly] {
                     <th>Gender</th>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
                     <th>City</th>  
                     <th>Enrollment Date</th>
-                    <th>Action</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -364,11 +452,8 @@ textarea[readonly] {
                         <td>${student.email}</td>
                         <td>${student.gender}</td>
                         <td>${student.city}</td>
-                        <td>${student.enrollmentDate}</td>
-                      <%--   <td><fmt:formatDate value="${student.enrollmentDate}" pattern="yyyy-MM-dd" /></td> --%>
-                        <td>
-                        <a href="DeleteStudentEnrollmentServlet?studentId=${student.id}"> <i class="fas fa-trash-alt"></i>  </a>
-                        </td>
+                        <td>${teacher.enrollmentDate}</td>
+                        
                     </tr>
                 </c:forEach>
                 
@@ -376,17 +461,12 @@ textarea[readonly] {
              
         </table>
         </div>
-
-        <div id="enrollment" class="section-content">
-            <h3>Enrollment Info</h3>
-            <p>This section contains information about the enrollments.</p>
-        </div>
-
-        <div id="material" class="section-content">
+		<div id="material" class="section-content">
     <h3>Classroom Material</h3>
     
-    <!-- Link to Create Material -->
-   
+    
+    
+    
     <!-- Loop through material list and display each material with an icon -->
    <c:forEach items="${materialList}" var="material">
     <div class="material-box">
@@ -399,15 +479,11 @@ textarea[readonly] {
                 <i class="fa fa-eye"></i>
             </a>
             <!-- Delete Action with Icon -->
-            <a href="DeleteMaterialServlet?materialId=${material.id}&classID=${classroom.id}" class="action-link" style="color:red">
-                <i class="fa fa-trash"></i>
-            </a>
+            
         </div>
     </div>
    </c:forEach>
 </div>
-
-    </div>
 </div>
 <script>
 function toggleSection(sectionId) {
@@ -423,7 +499,47 @@ function toggleSection(sectionId) {
         section.style.display = 'block';
     }
 }
-</script>
+var modal = document.getElementById('joinModal');
+var joinClassLink = document.getElementById('joinClassLink');
+var modalCloseBtn = document.getElementById('modalCloseBtn');
+var joinClassBtn = document.getElementById('joinClassBtn');
 
+// When the user clicks the "Join The Class" link, open the modal
+joinClassLink.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks the "Close" button, close the modal
+modalCloseBtn.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks the "Yes, Join" button, close the modal
+joinClassBtn.onclick = function() {
+    // Add functionality to join the class (e.g., submit a form or make an API call)
+    
+    modal.style.display = "none"; // Close the modal
+}
+
+// When the user clicks anywhere outside the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+const passcodeInput = document.getElementById("passcodeInput");
+
+// Automatically move focus when the user types
+passcodeInput.addEventListener("input", function () {
+    const value = passcodeInput.value;
+    
+    // If 5 characters are entered, stop typing
+    if (value.length === 5) {
+        passcodeInput.blur(); // Optional: remove focus after entering 5 digits
+    }
+});
+
+
+</script>
 </body>
 </html>

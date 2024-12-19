@@ -9,5 +9,6 @@ public class StudentDTO {
     private String email;     
     private String password;  
     private String city;      
-    private String gender;      
+    private String gender;
+    private String enrollmentDate;
 }

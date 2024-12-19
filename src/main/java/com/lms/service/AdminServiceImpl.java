@@ -13,6 +13,7 @@ import com.lms.dto.StudentDTO;
 import com.lms.dto.TeacherDTO;
 import com.lms.entity.AdminEntity;
 import com.lms.entity.ClassroomEntity;
+import com.lms.entity.StudentEnrollmentEntity;
 import com.lms.entity.StudentEntity;
 import com.lms.entity.TeacherEnrollmentEntity;
 import com.lms.entity.TeacherEntity;
@@ -21,6 +22,7 @@ import com.lms.mapper.StudentMapper;
 import com.lms.mapper.TeacherMapper;
 import com.lms.repository.AdminRepository;
 import com.lms.repository.ClassroomRepository;
+import com.lms.repository.StudentEnrollmentRepository;
 import com.lms.repository.StudentRepository;
 import com.lms.repository.TeacherEnrollmentRepository;
 import com.lms.repository.TeacherRepository;
@@ -43,6 +45,9 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Autowired
 	private final TeacherEnrollmentRepository trEnrollRepo=new TeacherEnrollmentRepository();
+	
+	@Autowired
+	private final StudentEnrollmentRepository stuEnrollRepo=new StudentEnrollmentRepository();
 	
 	@Autowired
     private CloudinaryService cloudinaryService;
@@ -179,6 +184,20 @@ public class AdminServiceImpl implements AdminService{
 			trListDTO.add(trDTO);
 		}
 		return trListDTO;
+	}
+	@Override
+	public List<StudentDTO> getStudentssInClassroom(int classroomId){
+		List<StudentEnrollmentEntity> stuEnrollListEntity=stuEnrollRepo.retrieveStudentEnrollmentInTheClassroom(classroomId);
+		List<StudentDTO> stuListDTO=new ArrayList<StudentDTO>();
+		for(StudentEnrollmentEntity studentEnrollEntity:stuEnrollListEntity) {
+			StudentEntity studentEntity=studentEnrollEntity.getStudent();
+			StudentDTO stuDTO=studentMapper.toDTO(studentEntity);
+			LocalDateTime createdDate = studentEnrollEntity.getEnrollmentDate();
+			String formattedDate = createdDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			stuDTO.setEnrollmentDate(formattedDate);
+			stuListDTO.add(stuDTO);
+		}
+		return stuListDTO;
 	}
 	@Override
 	public ClassroomDTO getClassById(int classroomId) {

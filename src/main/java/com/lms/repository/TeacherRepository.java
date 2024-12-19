@@ -43,6 +43,12 @@ public class TeacherRepository {
 		TeacherEntity teacher=em.find(TeacherEntity.class, teacherId);
 		return teacher;
 	}
+	public TeacherEntity retrieveTeacherByEmail(String teacherEmail) {
+		EntityManager em=JPAUtil.getEniEntityManager();
+		TeacherEntity teacher=	(TeacherEntity) em.createQuery("Select t From TeacherEntity t Where t.email=:email").setParameter("email", teacherEmail)
+		.getSingleResult();
+		return teacher;
+	}
 	public void updateTeacher(TeacherEntity teacherEntity) {
 	    EntityManager em = null;
 	    try {

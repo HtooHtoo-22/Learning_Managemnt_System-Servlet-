@@ -146,6 +146,34 @@ public class UserRepository {
 	    }
 	    return userDTO;
 	}
+	public UserDTO checkTeacherPasscode(LoginDTO loginDTO) {
+	    UserDTO userDTO = null;
+	    EntityManager em = JPAUtil.getEniEntityManager();
+	    try {
+	        String query = "SELECT t FROM TeacherEntity t WHERE t.email=:email AND t.generate_password=:passcode";
+	        TypedQuery<TeacherEntity> queryTeacher = em.createQuery(query, TeacherEntity.class);
+	        queryTeacher.setParameter("email", loginDTO.getEmail());
+	        queryTeacher.setParameter("passcode", loginDTO.getPassword());
+	        TeacherEntity teacher = queryTeacher.getSingleResult();
+	        if (teacher != null) {
+	            userDTO = new UserDTO();
+	            userDTO.setId(teacher.getId());
+	            userDTO.setName(teacher.getName());
+	            userDTO.setEmail(teacher.getEmail());
+	            userDTO.setPassword(teacher.getPassword());
+	            userDTO.setRole("Teacher");
+	        }
+	    } catch (NoResultException e) {
+	       
+	    } catch (Exception e) {
+	       
+	    } finally {
+	        if (em != null) {
+	            em.close();
+	        }
+	    }
+	    return userDTO;
+	}
 
 	public UserDTO checkStudentPassword(LoginDTO loginDTO) {
 	    UserDTO userDTO = null;

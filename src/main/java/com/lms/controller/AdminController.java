@@ -131,10 +131,11 @@ public class AdminController {
 	@GetMapping("/viewClassroomDetail")
 	public String viewClassroomDetail(@RequestParam("id")int classId,Model model) {
 		List<TeacherDTO> trList=adminService.getTeachersInClassroom(classId);
-		//List <StudentDTO> stuList=adminService.getStudentsInClassroom(classId);
+		List <StudentDTO> stuList=adminService.getStudentssInClassroom(classId);
 		//List <MaterialDTO>
 		ClassroomDTO classroom=adminService.getClassById(classId);
 		
+		model.addAttribute("studentList", stuList);
 		model.addAttribute("classroom", classroom);
 		model.addAttribute("teacherList", trList);
 		return "viewClassDetail";

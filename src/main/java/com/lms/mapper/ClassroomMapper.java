@@ -2,6 +2,8 @@ package com.lms.mapper;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -54,4 +56,12 @@ public class ClassroomMapper {
 
 	        return entity;
 	    }
+	 public List<ClassroomDTO> toDTOList(List<ClassroomEntity> classEntityList){
+		 List<ClassroomDTO> classListDTO=new ArrayList<ClassroomDTO>();
+		 for(ClassroomEntity classEntity:classEntityList) {
+			 ClassroomDTO classDTO= toDTO(classEntity);
+			 classListDTO.add(classDTO);
+		 }
+		 return classListDTO;
+	 }
 }

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import com.lms.entity.ClassroomEntity;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 
 @Repository
 public class ClassroomRepository {
@@ -42,4 +44,30 @@ public class ClassroomRepository {
 		}
 		return false;
 	}
+	public boolean checkClassroomPasscode(int classId, String passcode) {
+	    EntityManager em = JPAUtil.getEniEntityManager();
+	    try {
+	        TypedQuery<ClassroomEntity> queryClass = em.createQuery(
+	            "SELECT c FROM ClassroomEntity c WHERE c.id = :id AND c.passcode = :passcode", 
+	            ClassroomEntity.class
+	        );
+	        queryClass.setParameter("id", classId);
+	        queryClass.setParameter("passcode", passcode);
+	        
+	        ClassroomEntity classroom = queryClass.getSingleResult();
+	        return classroom != null; // If found, return true
+	    } catch (NoResultException e) {
+	        return false; // If no result is found, return false
+	    } finally {
+	        em.close(); // Ensure EntityManager is closed
+	    }
+	}
+	public void updateClassroom(ClassroomEntity classroom) {
+		EntityManager em=JPAUtil.getEniEntityManager();
+		em.getTransaction().begin();
+		em.merge(classroom);
+		em.getTransaction().commit();
+		em.close();
+	}
+
 }

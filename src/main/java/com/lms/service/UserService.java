@@ -12,4 +12,7 @@ public interface UserService {
 	public String validateEmail(String email);
 	
 	public void registerstudent(StudentDTO student);
+	public boolean validateTeacherAccIsNew(String password);
+	
+	public void changeTeacherPassword(int teacherId,String password);
 }
